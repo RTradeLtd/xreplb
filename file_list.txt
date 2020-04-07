@@ -1,4 +1,3 @@
-120000
 testfile1
 testfile10
 testfile100

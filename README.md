@@ -43,3 +43,20 @@ TemporalX doesn't currently support folder uploads, so IPFS Cluster has the adva
 
 * Add directory to IPFS Cluster + pin root
 * Add test files 1 by 1 to TemporalX + bulk pin
+
+# a note on temporalx replication errors
+
+One of the great things about TemporalX's replication is that it can do run-time error recovering, some of the loops may run faster than temporalx being able to process replication updates and you'll see errors like so:
+
+```
+connecting to server 0 at {12D3KooWGrjfQVFPBoPXGBjwLpDtyQZ9iFCD55BjVxndH9YKHw2n 9094 [/ip4/127.0.0.1/tcp/4005]}
+failed to check server state after submit:rpc error: code = Aborted desc = replication version target lowered
+connecting to server 1 at {12D3KooWC2HDv4NtkrEgZyDaHCbE7SzwFciJihCCdaoacNtEnTi1 9095 [/ip4/127.0.0.1/tcp/4006]}
+failed to check server state after submit:rpc error: code = DeadlineExceeded desc = context deadline exceeded
+connecting to server 2 at {12D3KooWEeHhDv1ygsaKDNX6SFMrTSxyN4KXGkzQJLH2YqYUjUsP 9096 [/ip4/127.0.0.1/tcp/4007]}
+receive server status failed:rpc error: code = DeadlineExceeded desc = context deadline exceeded
+error encountered: publishing failed after all servers exhausted
+```
+
+This doesn't put a stop to the replication broadcast update, and TemporalX will recover from the error, continuing on with the replication updates. If IPFS Cluster were to encounter an error like this, it would simply fail and stop, or, the pin would be stuck in the error state requiring manual intervention
+

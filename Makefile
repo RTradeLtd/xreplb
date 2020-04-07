@@ -4,7 +4,7 @@ start-temporalx:
 
 .PHONY: stop-temporalx
 stop-temporalx:
-	(cd temporalx ; docker-compose stop && docker-compose rm)
+	(cd temporalx ; docker-compose stop && docker-compose rm -v ; make cleanup)
 
 .PHONY: gen-testdata
 gen-testdata:

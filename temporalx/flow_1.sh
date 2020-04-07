@@ -25,4 +25,15 @@ authorprivatekey: ""
 clientprivatekey: ""
 EOF
 
+echo "start time $(date +%s)" > timer.txt
 
+while IFS= read -r line; do
+    FILE_NAME="../test_data/$line"
+    HASH=$(tex-cli --config node1/config.yml client file upload --fn $FILE_NAME | awk '{print $NF}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
+    tex-cli --config node1/config.yml  rep edit -i -a "$HASH"
+    tex-cli --config node1/config.yml rep sign
+done < ../file_list.txt
+
+tex-cli --config node1/config.yml rep check
+
+echo "end time $(date +%s)" >> timer.txt
