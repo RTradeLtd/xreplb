@@ -17,15 +17,15 @@ fix-perms:
 
 .PHONY: temporalx-flow1
 temporalx-flow1:
-	(cd temporalx ; ./flow_1.sh)
+	(cd temporalx ; ./flow_1.sh 1000)
 
 .PHONY: temporalx-flow2
 temporalx-flow2:
-	(cd temporalx ; ./flow_2.sh)
+	(cd temporalx ; ./flow_2.sh 1000)
 
 .PHONY: temporalx-flow3
 temporalx-flow3:
-	(cd temporalx ; ./flow_3.sh)
+	(cd temporalx ; ./flow_3.sh 1000)
 
 # this isn't working for some reason
 # .PHONY: gen-file-list
