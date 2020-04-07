@@ -14,3 +14,20 @@ gen-testdata:
 fix-perms:
 	chown -R $(shell whoami) *
 	chgrp -R $(shell whoami) *
+
+.PHONY: temporalx-flow1
+temporalx-flow1:
+	(cd temporalx ; ./flow_1.sh)
+
+.PHONY: temporalx-flow2
+temporalx-flow2:
+	(cd temporalx ; ./flow_2.sh)
+
+.PHONY: temporalx-flow3
+temporalx-flow3:
+	(cd temporalx ; ./flow_3.sh)
+
+# this isn't working for some reason
+# .PHONY: gen-file-list
+# gen-file-list:
+#	ls -l test_data | awk '{print $NF}' > file_list.txt

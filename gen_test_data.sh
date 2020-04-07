@@ -4,7 +4,7 @@
 
 FILE_COUNT=10000
 
-rm -rf test_data 2>&1 /dev/null
+rm -rf test_data
 mkdir test_data
 
 echo "[INFO] generating $TEST_COUNT test files"
