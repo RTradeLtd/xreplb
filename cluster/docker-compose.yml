@@ -1,0 +1,63 @@
+version: '3.5'
+
+services:
+  ipfs.node.1:
+    container_name: "ipfs_node_1"
+    image: ipfs/go-ipfs:v0.5.0-rc1
+    command: daemon --migrate=true --enable-namesys-pubsub
+    network_mode: "host"
+    volumes:
+      - ${PWD}/configs/node1/config:/data/ipfs/config
+      - ${PWD}/configs/node1/version:/data/ipfs/version
+      - ${PWD}/configs/node1/datastore_spec:/data/ipfs/datastore_spec
+
+  ipfs.cluster.1:
+    container_name: "ipfs_cluster_1"
+    depends_on: 
+      - ipfs.node.1
+    image: ipfs/ipfs-cluster:v0.12.1
+    network_mode: "host"
+    volumes:
+      - ${PWD}/configs/node1/service.json:/data/ipfs-cluster/service.json
+      - ${PWD}/configs/node1/identity.json:/data/ipfs-cluster/identity.json
+
+  ipfs.node.2:
+    container_name: "ipfs_node_2"
+    image: ipfs/go-ipfs:v0.5.0-rc1
+    command: daemon --migrate=true --enable-namesys-pubsub
+    network_mode: "host"
+    volumes:
+      - ${PWD}/configs/node2/config:/data/ipfs/config
+      - ${PWD}/configs/node2/version:/data/ipfs/version
+      - ${PWD}/configs/node2/datastore_spec:/data/ipfs/datastore_spec
+
+  ipfs.cluster.2:
+    container_name: "ipfs_cluster_2"
+    depends_on: 
+      - ipfs.node.2
+    image: ipfs/ipfs-cluster:v0.12.1
+    network_mode: "host"
+    volumes:
+      - ${PWD}/configs/node2/service.json:/data/ipfs-cluster/service.json
+      - ${PWD}/configs/node2/identity.json:/data/ipfs-cluster/identity.json
+    
+  ipfs.node.3:
+    container_name: "ipfs_node_3"
+    image: ipfs/go-ipfs:v0.5.0-rc1
+    command: daemon --migrate=true --enable-namesys-pubsub
+    network_mode: "host"
+    volumes:
+      - ${PWD}/configs/node3/config:/data/ipfs/config
+      - ${PWD}/configs/node3/version:/data/ipfs/version
+      - ${PWD}/configs/node3/datastore_spec:/data/ipfs/datastore_spec
+
+  ipfs.cluster.3:
+    container_name: "ipfs_cluster_3"
+    depends_on: 
+      - ipfs.node.3
+    image: ipfs/ipfs-cluster:v0.12.1
+    network_mode: "host"
+    volumes:
+      - ${PWD}/configs/node3/service.json:/data/ipfs-cluster/service.json
+      - ${PWD}/configs/node3/identity.json:/data/ipfs-cluster/identity.json
+

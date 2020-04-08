@@ -6,6 +6,14 @@ start-temporalx:
 stop-temporalx:
 	(cd temporalx ; docker-compose stop && docker-compose rm -v ; make cleanup)
 
+.PHONY: start-ipfs
+start-ipfs:
+	(cd cluster ; docker-compose up -d)
+
+.PHONY: stop-ipfs
+stop-ipfs:
+	(cd cluster ; docker-compose stop ; docker-compose rm -v)
+
 .PHONY: gen-testdata
 gen-testdata:
 	./gen_test_data.sh
