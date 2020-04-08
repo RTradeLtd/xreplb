@@ -35,10 +35,6 @@ temporalx-flow2:
 temporalx-flow3:
 	(cd temporalx ; ./flow_3.sh 1000)
 
-.PHONY: ipfs-flow1
-ipfs-flow1:
-	(cd cluster ; ./flow_1.sh 1000)
-
 # this isn't working for some reason
 # .PHONY: gen-file-list
 # gen-file-list:

@@ -17,7 +17,8 @@ The goal of the benchmarks is to compare how long it will take TemporalX to repl
   * For example, if we can get all three TemporalX nodes to have the entire pinset replicated faster than IPFS Cluster, thats good
   * If it takes TemporalX longer to have the entire pinset replicated slower than IPFS Cluster, thats bad
 
-We will not be looking at memory consumption as it's pretty clear TemporalX will consume less memory. We have published benchmarks previously about the memory consumption of TemporalX vs go-ipfs, so memory measurements are already pretty clear. Additionally IPFS Cluster requires a total of 6 services to run the equivalent set:
+
+We will not be looking at memory consumption as it's pretty clear TemporalX will consume less memory. We have published benchmarks previously about the memory consumption of TemporalX vs go-ipfs, so we already have measurements indicating that memory consumption is far superior. Additionally IPFS Cluster requires a total of 6 services to run the equivalent set:
 
 * 3 go-ipfs nodes
 * 3 ipfs-cluster nodes
@@ -26,19 +27,28 @@ Whereas TemporalX simply requires 3 TemporalX nodes.
 
 # benchmark workflow
 
-The following benchmark workflow is meant to simulate general functioning of IPFS + IPFS Cluster in an environment similar to what Temporal does, which is letting users upload files and then triggering a replication update to the IPFS Cluster pinset. In summary:
+Where possible we will make benchmark workflow the same however there will be some slight variations
+
+## flow 1
 
 * Add all test files 1 by 1 to TemporalX/Go-IPFS
 * Add all new replication pinset updates 1-by-1 to TemporalX/IPFS Cluster
 
-### results
+## flow 2
 
-* TemporalX took 128 seconds to reach convergence on 1000 pins
-* IPFS Cluster took 1020 seconds to reach convergence on the same 1000 pins
+Unfortunately it's not possible to send a bulk update to IPFS Cluster about update to the pinsets, you need to add updates 1-by-1
 
-# errors
+* Add all test files 1 by 1 to TemporalX/Go-IPFS
+* Bulk add new replication pinset to TemporalX (pin-by-pin update to IPFS Cluster)
 
-## a note on temporalx replication errors
+## flow 3
+
+TemporalX doesn't currently support folder uploads, so IPFS Cluster has the advantage here
+
+* Add directory to IPFS Cluster + pin root
+* Add test files 1 by 1 to TemporalX + bulk pin
+
+# a note on temporalx replication errors
 
 One of the great things about TemporalX's replication is that it can do run-time error recovering, some of the loops may run faster than temporalx being able to process replication updates and you'll see errors like so:
 
@@ -52,17 +62,5 @@ receive server status failed:rpc error: code = DeadlineExceeded desc = context d
 error encountered: publishing failed after all servers exhausted
 ```
 
-This doesn't put a stop to the replication broadcast update, and TemporalX will recover from the error, continuing on with the replication updates. Time to recovery was much faster with TemporalX (roughly 2-3 seconds) whereas IPFS Cluster appeared to have a recovery time of roughly 10 seconds.
+This doesn't put a stop to the replication broadcast update, and TemporalX will recover from the error, continuing on with the replication updates. If IPFS Cluster were to encounter an error like this, it would simply fail and stop, or, the pin would be stuck in the error state requiring manual intervention
 
-## a note on ipfs replication errors
-
-While running the benchmark suite, you may get errors like this with go-ipfs:
-
-```
-2020-04-07T18:53:49.670-0700	ERROR	provider.queue	queue/queue.go:124	Failed to enqueue cid: datastore closed
-github.com/ipfs/go-ipfs-provider/queue.(*Queue).work.func1
-	pkg/mod/github.com/ipfs/go-ipfs-provider@v0.4.2/queue/queue.go:124
-Qmc4isSGqrbt8zzsAB9rdAwpU7cBiMPWunyaFGPWP3WC6h :
-```
-
-This error was also recoverable, but recovery time took 2x-3x as long as TemporalX and occurred roughly 30 or so times through the benchmark.

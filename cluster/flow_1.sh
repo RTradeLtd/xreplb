@@ -12,7 +12,7 @@ while IFS= read -r line; do
       break
     fi
     FILE_NAME="../test_data/$line"
-    HASH=$(ipfs add $FILE_NAME | awk '{print $2}')
+    HASH=$(ipfs --api=/ip4/127.0.0.1/tcp/5001 add $FILE_NAME | awk '{print $2}')
     ipfs-cluster-ctl pin add "$HASH"
     let COUNT=COUNT+1
 done < ../file_list.txt
