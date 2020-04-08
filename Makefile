@@ -1,3 +1,5 @@
+WHOAMI=$(shell whoami)
+
 .PHONY: start-temporalx
 start-temporalx:
 	(cd temporalx ; make cleanup ; make start)
@@ -20,8 +22,8 @@ gen-testdata:
 
 .PHONY: fix-perms
 fix-perms:
-	chown -R $(shell whoami) *
-	chgrp -R $(shell whoami) *
+	sudo chown -R $(WHOAMI) *
+	sudo chgrp -R $(WHOAMI) *
 
 .PHONY: temporalx-flow1
 temporalx-flow1:
