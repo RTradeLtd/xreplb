@@ -52,17 +52,4 @@ receive server status failed:rpc error: code = DeadlineExceeded desc = context d
 error encountered: publishing failed after all servers exhausted
 ```
 
-This doesn't put a stop to the replication broadcast update, and TemporalX will recover from the error, continuing on with the replication updates. Time to recovery was much faster with TemporalX (roughly 2-3 seconds) whereas IPFS Cluster appeared to have a recovery time of roughly 10 seconds.
-
-## a note on ipfs replication errors
-
-While running the benchmark suite, you may get errors like this with go-ipfs:
-
-```
-2020-04-07T18:53:49.670-0700	ERROR	provider.queue	queue/queue.go:124	Failed to enqueue cid: datastore closed
-github.com/ipfs/go-ipfs-provider/queue.(*Queue).work.func1
-	pkg/mod/github.com/ipfs/go-ipfs-provider@v0.4.2/queue/queue.go:124
-Qmc4isSGqrbt8zzsAB9rdAwpU7cBiMPWunyaFGPWP3WC6h :
-```
-
-This error was also recoverable, but recovery time took 2x-3x as long as TemporalX and occurred roughly 30 or so times through the benchmark.
+This doesn't put a stop to the replication broadcast update, and TemporalX will recover from the error, continuing on with the replication updates. Time to recovery was much faster with TemporalX (roughly 2-3 seconds) whereas IPFS Cluster appeared to have a recovery time of roughly 10 seconds for equivalent pin failures.
