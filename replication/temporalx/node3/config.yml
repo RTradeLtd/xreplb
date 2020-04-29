@@ -1,0 +1,53 @@
+temporalx:
+  api:
+    tracing: false
+    listen_address: 0.0.0.0:9092
+    listen_proto: tcp
+node:
+  listen_addresses:
+  - /ip4/0.0.0.0/tcp/4007
+  private_key: 08011240dbc62d6ef941f92d8f5a536ff1899ced80274ceac454098fac27992ec0ef4ef047b591348e617c99b5213719251931d2e8008b34bcf19b02c427657d3f246e56
+  storage:
+    type: badger
+    path: /temporalx/storage
+    opts:
+      fileLoadingMode: "0"
+  peerstore:
+    type: datastore
+    datastore:
+      type: leveldb
+      path: /temporalx/peerstore
+  keystore:
+    type: krab
+    passphrase: Swoovretag
+    datastore:
+      type: leveldb
+      path: /temporalx/keystore
+  replication:
+    enabled: true
+    database_location: /temporalx/storage/replication/db.sqlite
+    grpc_port: 9096
+    white_list_location: /temporalx/storage/replication/publishers
+    replication_delay: 10m
+  libp2p:
+    connection_manager:
+      enabled: true
+      low_water_mark: 100
+      high_water_mark: 300
+      grace_period: 20s
+    circuit:
+      enable: false
+      active: false
+      discovery: false
+      relay_hop: false
+    enabled_transports:
+      tls: true
+    dht_options:
+      persistentDHT: "true"
+    host_options: {}
+  opts:
+    blockstoreCaching: false
+    lowPower: true
+    namesys: true
+    pubsub: true
+log_file: /temporalx/logger.log
